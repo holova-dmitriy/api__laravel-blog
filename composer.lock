@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "66ca7343889332c2b8ecca11c251430c",
+    "content-hash": "20f250bb458c8363326ba62d547fb877",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -741,6 +741,80 @@
                 "storage"
             ],
             "time": "2018-10-15T13:53:10+00:00"
+        },
+        {
+            "name": "mad-web/laravel-initializer",
+            "version": "1.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mad-web/laravel-initializer.git",
+                "reference": "fb0a948b685e0cc611f65007eb0b2baf0639ce18"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mad-web/laravel-initializer/zipball/fb0a948b685e0cc611f65007eb0b2baf0639ce18",
+                "reference": "fb0a948b685e0cc611f65007eb0b2baf0639ce18",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/bus": "~5.5.0|~5.6.0|~5.7.0",
+                "illuminate/config": "~5.5.0|~5.6.0|~5.7.0",
+                "illuminate/console": "~5.5.0|~5.6.0|~5.7.0",
+                "illuminate/container": "~5.5.0|~5.6.0|~5.7.0",
+                "illuminate/support": "~5.5.0|~5.6.0|~5.7.0",
+                "php": "^7.1",
+                "symfony/process": "~3.0|~4.0"
+            },
+            "require-dev": {
+                "codedungeon/phpunit-result-printer": "^0.6.0",
+                "mockery/mockery": "^1.0.0",
+                "orchestra/testbench": "~3.5.0|~3.6.0|~3.7.0",
+                "phpunit/phpunit": "^6.5|^7.0"
+            },
+            "suggest": {
+                "laravel/framework": "Required to use additional MakeCronTask, MakeEchoServerConfig and MakeSupervisorConfig Jobs."
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "MadWeb\\Initializer\\InitializerServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "MadWeb\\Initializer\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mad Web",
+                    "email": "madweb.dev@gmail.com",
+                    "homepage": "https://github.com/mad-web",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Package provides ability to setup application initialization actions",
+            "homepage": "https://github.com/mad-web/laravel-initializer",
+            "keywords": [
+                "Tasks",
+                "command",
+                "deploy",
+                "exec",
+                "init",
+                "initialize",
+                "install",
+                "laravel-initializer",
+                "mad-web",
+                "process",
+                "update"
+            ],
+            "time": "2018-10-21T22:31:34+00:00"
         },
         {
             "name": "monolog/monolog",
