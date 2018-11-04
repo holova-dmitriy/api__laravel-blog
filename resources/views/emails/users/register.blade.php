@@ -1,0 +1,1 @@
+<p>Hi, {{ $params['user']->name }}</p>
