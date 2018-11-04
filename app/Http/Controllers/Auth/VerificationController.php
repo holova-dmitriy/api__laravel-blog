@@ -16,6 +16,6 @@ class VerificationController
             'api_token' => User::generateToken(),
         ]);
 
-        return new MessageResource(['Successfully email verified']);
+        return new MessageResource([trans('messages.verified')]);
     }
 }

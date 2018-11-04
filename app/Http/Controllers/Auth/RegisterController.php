@@ -19,6 +19,6 @@ class RegisterController extends Controller
             'api_token' => User::generateToken(),
         ])));
 
-        return new MessageResource(['Successfully registered']);
+        return new MessageResource([trans('messages.registered')]);
     }
 }
