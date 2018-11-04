@@ -7,12 +7,20 @@ use App\Http\Resources\BaseResource as Resource;
 class MessageResource extends Resource
 {
     protected $messages;
+    protected $errors;
 
-    public function __construct(array $messages = [])
+    /**
+     * MessageResource instance.
+     *
+     * @param array $messages
+     * @param array $errors
+     */
+    public function __construct(array $messages = [], array $errors = [])
     {
         parent::__construct([]);
 
         $this->messages = $messages;
+        $this->errors = $errors;
     }
 
     /**
@@ -25,7 +33,7 @@ class MessageResource extends Resource
     {
         return [
             'messages' => $this->messages,
-            'errors' => [],
+            'errors' => $this->errors,
         ];
     }
 }
