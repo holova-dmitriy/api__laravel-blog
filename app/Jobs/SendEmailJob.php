@@ -14,6 +14,7 @@ class SendEmailJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public $subject;
     public $template;
     public $to;
     public $params;
@@ -22,14 +23,16 @@ class SendEmailJob implements ShouldQueue
     /**
      * Create a new job instance.
      *
+     * @param string $subject
      * @param string $template
      * @param $to
      * @param array $params
      * @param $attachments
      * @return void
      */
-    public function __construct(string $template, $to, array $params = [], $attachments = [])
+    public function __construct(string $subject, string $template, $to, array $params = [], $attachments = [])
     {
+        $this->subject = $subject;
         $this->template = $template;
         $this->to = $to;
         $this->params = $params;
@@ -43,6 +46,6 @@ class SendEmailJob implements ShouldQueue
      */
     public function handle()
     {
-        Mail::to($this->to)->send(new SendMail($this->template, $this->params, $this->attachments));
+        Mail::to($this->to)->send(new SendMail($this->subject, $this->template, $this->params, $this->attachments));
     }
 }

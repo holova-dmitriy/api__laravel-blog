@@ -2,38 +2,22 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\ResetsPasswords;
+use App\Events\UserPasswordResetEvent;
+use App\Http\Resources\MessageResource;
+use App\Http\Requests\Auth\ResetPasswordRequest;
 
-class ResetPasswordController extends Controller
+class ResetPasswordController
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Password Reset Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller is responsible for handling password reset requests
-    | and uses a simple trait to include this behavior. You're free to
-    | explore this trait and override any methods you wish to tweak.
-    |
-    */
-
-    use ResetsPasswords;
-
-    /**
-     * Where to redirect users after resetting their password.
-     *
-     * @var string
-     */
-    protected $redirectTo = '/home';
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public function __invoke(ResetPasswordRequest $request)
     {
-        $this->middleware('guest');
+        $user = auth()->user();
+
+        $user->update([
+            'password' => bcrypt($request->get('password')),
+        ]);
+
+        event(new UserPasswordResetEvent($user));
+
+        return new MessageResource([trans('messages.password.updated')]);
     }
 }

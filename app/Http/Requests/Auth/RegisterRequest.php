@@ -17,7 +17,7 @@ class RegisterRequest extends Request
         return [
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:'.(new User())->getTable().',email',
-            'password' => 'required|string|confirmed',
+            'password' => 'required|string|confirmed|min:6',
         ];
     }
 }

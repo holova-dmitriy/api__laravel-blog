@@ -10,6 +10,7 @@ class SendMail extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $subject;
     public $template;
     public $params;
     public $attachmentsFile;
@@ -17,13 +18,15 @@ class SendMail extends Mailable
     /**
      * Create a new message instance.
      *
+     * @param string $subject
      * @param string $template
      * @param array $params
      * @param $attachments
      * @return void
      */
-    public function __construct(string $template, array $params = [], $attachments = [])
+    public function __construct(string $subject, string $template, array $params = [], $attachments = [])
     {
+        $this->subject = $subject;
         $this->template = $template;
         $this->params = $params;
         $this->attachmentsFile = $attachments;
@@ -36,7 +39,9 @@ class SendMail extends Mailable
      */
     public function build()
     {
-        $email = $this->view($this->template);
+        $email = $this
+            ->subject($this->subject)
+            ->view($this->template);
 
         foreach ($this->attachmentsFile as $attachment) {
             $email->attach($attachment->getPath());
