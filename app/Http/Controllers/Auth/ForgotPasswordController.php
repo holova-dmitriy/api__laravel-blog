@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Crypt;
 use App\Events\UserForgotPasswordEvent;
 use App\Http\Resources\MessageResource;
 use App\Http\Requests\Auth\ForgotPasswordRequest;
@@ -15,6 +16,7 @@ class ForgotPasswordController extends Controller
     {
         $email = $request->get('email');
 
+//        dd($this->getUrl($request, $this->createNewToken($email)));
         event(new UserForgotPasswordEvent($email, $this->getUrl($request, $this->createNewToken($email))));
 
         return new MessageResource([trans('messages.password.forgot')]);
@@ -33,12 +35,10 @@ class ForgotPasswordController extends Controller
                 'created_at' => new Carbon,
             ]);
 
-        return base64_encode(
-            json_encode([
-                'email' => $email,
-                'token' => $token,
-            ])
-        );
+        return Crypt::encrypt([
+            'email' => $email,
+            'token' => $token,
+        ]);
     }
 
     private function getTable()

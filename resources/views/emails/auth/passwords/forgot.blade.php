@@ -79,7 +79,7 @@
                             <p style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #74787E; line-height: 1.5em; margin-top: 0; text-align: left; font-size: 12px;">
                                 If you’re having trouble clicking the "Reset Password" button, copy and paste the URL below
                                 into your web browser:
-                                <a href="{{ $params['url'] }}" style="font-family: Avenir, Helvetica, sans-serif; box-sizing: border-box; color: #3869D4;"
+                                <a href="{{ $params['url'] }}" style="font-family: Avenir, Helvetica, sans-serif;box-sizing:border-box;color:#3869D4;display:block;width:570px;word-wrap:break-word;"
                                    target="_blank">
                                     {{ $params['url'] }}
                                 </a>

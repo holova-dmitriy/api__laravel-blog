@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Crypt;
 use App\Events\UserResetPasswordEvent;
 use App\Http\Resources\MessageResource;
 use Illuminate\Support\Facades\Password;
@@ -32,11 +33,11 @@ class ResetPasswordController
 
     private function credentials(ResetPasswordRequest $request)
     {
-        $tokenDecode = json_decode(base64_decode($request->get('token')));
+        $tokenDecrypt = Crypt::decrypt($request->get('token'));
 
         return [
-            'email' => $tokenDecode->email,
-            'token' => $tokenDecode->token,
+            'email' => $tokenDecrypt['email'],
+            'token' => $tokenDecrypt['token'],
             'password' => $request->get('password'),
             'password_confirmation' => $request->get('password_confirmation'),
         ];
