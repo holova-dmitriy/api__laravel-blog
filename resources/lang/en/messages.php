@@ -5,5 +5,6 @@ return [
     'verified' => 'Successfully email verified',
     'password' => [
         'updated' => 'Password successfully updated',
+        'forgot' => 'Successfully forgot password',
     ],
 ];

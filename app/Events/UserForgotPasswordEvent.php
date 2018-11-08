@@ -2,28 +2,30 @@
 
 namespace App\Events;
 
-use App\Models\User;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 
-class UserPasswordResetEvent
+class UserForgotPasswordEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $user;
+    public $email;
+    public $url;
 
     /**
      * Create a new event instance.
      *
-     * @param User $user
+     * @param string $email
+     * @param string $url
      *
      * @return void
      */
-    public function __construct(User $user)
+    public function __construct(string $email, string $url)
     {
-        $this->user = $user;
+        $this->email = $email;
+        $this->url = $url;
     }
 
     /**

@@ -15,4 +15,9 @@ Route::get('/', function () {
     return view('welcome');
 })->name('index');
 
-Route::get('verify/{token}', 'Auth\VerificationController')->name('verify');
+Route::group([
+    'namespace' => 'Auth',
+], function () {
+    Route::get('email/verify/{token}', 'VerificationController@verify')->name('verification.verify');
+    Route::get('password/reset/{token}', 'ResetPasswordController@showResetForm')->name('password.reset');
+});

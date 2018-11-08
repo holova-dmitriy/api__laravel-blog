@@ -4,7 +4,8 @@ namespace App\Subscribers;
 
 use App\Jobs\SendEmailJob;
 use App\Events\UserRegisterEvent;
-use App\Events\UserPasswordResetEvent;
+use App\Events\UserResetPasswordEvent;
+use App\Events\UserForgotPasswordEvent;
 
 class UserSubscriber
 {
@@ -12,7 +13,7 @@ class UserSubscriber
     {
         SendEmailJob::dispatch(
             trans('emails.register.subject'),
-            'emails.users.register',
+            'emails.auth.register',
             $event->user->email,
             [
                 'user' => $event->user,
@@ -20,11 +21,23 @@ class UserSubscriber
         );
     }
 
-    public function onPasswordUpdated($event)
+    public function onForgotPassword($event)
+    {
+        SendEmailJob::dispatch(
+            trans('emails.password.forgot.subject'),
+            'emails.auth.passwords.forgot',
+            $event->email,
+            [
+                'url' => $event->url,
+            ]
+        );
+    }
+
+    public function onResetPassword($event)
     {
         SendEmailJob::dispatch(
             trans('emails.password.updated.subject'),
-            'emails.users.password_updated',
+            'emails.auth.passwords.reset',
             $event->user->email,
             [
                 'user' => $event->user,
@@ -45,8 +58,13 @@ class UserSubscriber
         );
 
         $events->listen(
-            UserPasswordResetEvent::class,
-            'App\Subscribers\UserSubscriber@onPasswordUpdated'
+            UserForgotPasswordEvent::class,
+            'App\Subscribers\UserSubscriber@onForgotPassword'
+        );
+
+        $events->listen(
+            UserResetPasswordEvent::class,
+            'App\Subscribers\UserSubscriber@onResetPassword'
         );
     }
 }

@@ -20,7 +20,13 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::group([
     'namespace' => 'Auth',
 ], function () {
-    Route::post('register', 'RegisterController')->name('register');
-    Route::post('login', 'LoginController')->name('login');
-    Route::middleware('auth:api')->post('reset', 'ResetPasswordController')->name('reset_password');
+    Route::post('register', 'RegisterController');
+    Route::post('login', 'LoginController');
+
+    Route::group([
+        'prefix' => 'password',
+    ], function () {
+        Route::post('email', 'ForgotPasswordController')->name('password.email');
+        Route::post('reset', 'ResetPasswordController@reset')->name('password.update');
+    });
 });

@@ -8,5 +8,8 @@ return [
         'updated' => [
             'subject' => 'Your password was changed',
         ],
+        'forgot' => [
+            'subject' => 'Reset Password Notification',
+        ],
     ],
 ];

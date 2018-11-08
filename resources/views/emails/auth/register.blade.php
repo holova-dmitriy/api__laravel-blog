@@ -21,7 +21,7 @@
         <td style="font-family:Helvetica,Arial,sans-serif!important;font-size:16px;line-height:24px;padding-top:40px;padding-bottom:20px">
             <div style="max-width:300px;margin:auto;">
                 <a style="background-color:#37a000;border:2px solid #37a000;border-radius:2px;color:#ffffff;white-space:nowrap;font-weight:bold;display:block;font-family:Helvetica,Arial,sans-serif;font-size:16px;line-height:36px;text-align:center;text-decoration:none"
-                   href="{{ route('verify', ['token' => $params['user']->api_token]) }}"
+                   href="{{ route('verification.verify', ['token' => $params['user']->api_token]) }}"
                    target="_blank">
                     Verify Email
                 </a>
