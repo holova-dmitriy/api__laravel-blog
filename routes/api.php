@@ -26,7 +26,8 @@ Route::group([
     Route::group([
         'prefix' => 'password',
     ], function () {
-        Route::post('email', 'ForgotPasswordController')->name('password.email');
+        Route::post('email', 'ForgotPasswordController')->middleware(['throttle:6,1'])->name('password.email');
         Route::post('reset', 'ResetPasswordController@reset')->name('password.update');
     });
+    Route::post('email/resend', 'VerificationController@resend')->middleware(['auth'])->name('verification.resend');
 });

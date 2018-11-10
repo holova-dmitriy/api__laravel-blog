@@ -16,7 +16,6 @@ class ForgotPasswordController extends Controller
     {
         $email = $request->get('email');
 
-//        dd($this->getUrl($request, $this->createNewToken($email)));
         event(new UserForgotPasswordEvent($email, $this->getUrl($request, $this->createNewToken($email))));
 
         return new MessageResource([trans('messages.password.forgot')]);

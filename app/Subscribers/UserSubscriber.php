@@ -2,6 +2,7 @@
 
 namespace App\Subscribers;
 
+use App\Events\UserVerifyEmailEvent;
 use App\Jobs\SendEmailJob;
 use App\Events\UserRegisterEvent;
 use App\Events\UserResetPasswordEvent;
@@ -17,6 +18,7 @@ class UserSubscriber
             $event->user->email,
             [
                 'user' => $event->user,
+                'url' => $event->url,
             ]
         );
     }
@@ -45,6 +47,19 @@ class UserSubscriber
         );
     }
 
+    public function onVerifyEmail($event)
+    {
+        SendEmailJob::dispatch(
+            trans('emails.verify.subject'),
+            'emails.auth.verify',
+            $event->user->email,
+            [
+                'user' => $event->user,
+                'url' => $event->url,
+            ]
+        );
+    }
+
     /**
      * Register the listeners for the subscriber.
      *
@@ -65,6 +80,11 @@ class UserSubscriber
         $events->listen(
             UserResetPasswordEvent::class,
             'App\Subscribers\UserSubscriber@onResetPassword'
+        );
+
+        $events->listen(
+            UserVerifyEmailEvent::class,
+            'App\Subscribers\UserSubscriber@onVerifyEmail'
         );
     }
 }

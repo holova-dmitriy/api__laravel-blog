@@ -7,13 +7,10 @@ use Illuminate\Support\Facades\Crypt;
 use App\Events\UserResetPasswordEvent;
 use App\Http\Resources\MessageResource;
 use Illuminate\Support\Facades\Password;
-use Illuminate\Foundation\Auth\ResetsPasswords;
 use App\Http\Requests\Auth\ResetPasswordRequest;
 
 class ResetPasswordController
 {
-    use ResetsPasswords;
-
     public function showResetForm($token)
     {
         return view('auth.passwords.reset', ['token' => $token]);
@@ -27,7 +24,7 @@ class ResetPasswordController
             });
 
         return $response === Password::PASSWORD_RESET
-            ? $this->sendResetResponse($response)
+            ? $this->sendResetResponse($request, $response)
             : $this->sendResetFailedResponse($request, $response);
     }
 
@@ -45,16 +42,24 @@ class ResetPasswordController
 
     private function resetPassword(User $user, string $password)
     {
-        $user->update([
-            'password' => bcrypt($password),
-        ]);
+        $userUpdateData['password'] = bcrypt($password);
+
+        if ($user->hasVerifiedEmail()) {
+            $userUpdateData['email_verified_at'] = $user->freshTimestamp();
+        }
+
+        $user->update($userUpdateData);
 
         event(new UserResetPasswordEvent($user));
     }
 
-    private function sendResetResponse($response)
+    private function sendResetResponse(ResetPasswordRequest $request, $response)
     {
-        return new MessageResource([trans($response)]);
+        return $request->wantsJson()
+            ? new MessageResource([trans($response)])
+            : view('auth.success_message', [
+                'message' => trans($response),
+            ]);
     }
 
     private function sendResetFailedResponse(ResetPasswordRequest $request, $response)
