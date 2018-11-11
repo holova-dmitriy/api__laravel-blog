@@ -31,3 +31,5 @@ Route::group([
     });
     Route::post('email/resend', 'VerificationController@resend')->middleware(['auth'])->name('verification.resend');
 });
+
+Route::apiResource('posts', 'PostController');

@@ -10,4 +10,5 @@ return [
         'updated' => 'Password successfully updated.',
         'forgot' => 'Successfully forgot password.',
     ],
+    'deleted' => 'Successfully deleted.',
 ];
