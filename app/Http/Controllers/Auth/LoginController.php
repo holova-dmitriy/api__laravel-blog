@@ -2,38 +2,62 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\User;
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Resources\LoginResource;
+use App\Http\Requests\Auth\LoginRequest;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Foundation\Auth\ThrottlesLogins;
 
 class LoginController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
+    use ThrottlesLogins;
 
-    use AuthenticatesUsers;
+    protected $user;
 
-    /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-    protected $redirectTo = '/home';
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public function __invoke(LoginRequest $request)
     {
-        $this->middleware('guest')->except('logout');
+        if ($this->hasTooManyLoginAttempts($request)) {
+            $this->fireLockoutEvent($request);
+
+            return $this->sendLockoutResponse($request);
+        }
+
+        if ($this->authenticate($request)) {
+            return $this->sendLoginResponse();
+        }
+
+        $this->incrementLoginAttempts($request);
+
+        return $this->sendFailedLoginResponse();
+    }
+
+    private function authenticate(LoginRequest $request)
+    {
+        $this->user = User::where('email', $request->get('email'))->first();
+
+        return $this->user && Hash::check($request->get('password'), $this->user->getAuthPassword());
+    }
+
+    protected function sendFailedLoginResponse()
+    {
+        throw ValidationException::withMessages([
+            $this->username() => [trans('auth.failed')],
+        ]);
+    }
+
+    protected function sendLoginResponse()
+    {
+        $this->user->update([
+            'api_token' => User::generateToken(),
+        ]);
+
+        return new LoginResource($this->user);
+    }
+
+    public function username()
+    {
+        return 'email';
     }
 }

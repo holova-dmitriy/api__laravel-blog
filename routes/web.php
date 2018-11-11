@@ -13,4 +13,11 @@
 
 Route::get('/', function () {
     return view('welcome');
+})->name('index');
+
+Route::group([
+    'namespace' => 'Auth',
+], function () {
+    Route::get('email/verify/{id}', 'VerificationController@verify')->middleware(['signed', 'throttle:6,1'])->name('verification.verify');
+    Route::get('password/reset/{token}', 'ResetPasswordController@showResetForm')->name('password.reset');
 });

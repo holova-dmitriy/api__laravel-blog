@@ -2,41 +2,40 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller;
-use Illuminate\Foundation\Auth\VerifiesEmails;
+use App\Traits\VerifiesEmails;
+use App\Events\UserVerifyEmailEvent;
+use App\Http\Resources\MessageResource;
+use App\Http\Requests\Auth\ResendPasswordVerifyEmailRequest;
 
-class VerificationController extends Controller
+class VerificationController
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Email Verification Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller is responsible for handling email verification for any
-    | user that recently registered with the application. Emails may also
-    | be resent if the user did not receive the original email message.
-    |
-    */
-
     use VerifiesEmails;
 
-    /**
-     * Where to redirect users after verification.
-     *
-     * @var string
-     */
-    protected $redirectTo = '/home';
-
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    public function verify(Request $request)
     {
-        $this->middleware('auth');
-        $this->middleware('signed')->only('verify');
-        $this->middleware('throttle:6,1')->only('verify', 'resend');
+        User::find($request->route('id'))->markEmailAsVerified();
+
+        $redirect = $request->get('redirect');
+
+        return $redirect
+            ? redirect("$redirect?message=".trans('messages.verify.verified'))
+            : view('auth.success_message', [
+                'message' => trans('messages.verify.verified'),
+            ]);
+    }
+
+    public function resend(ResendPasswordVerifyEmailRequest $request)
+    {
+        $user = $request->user();
+
+        if ($user->hasVerifiedEmail()) {
+            return new MessageResource([trans('messages.verify.verified')]);
+        }
+
+        event(new UserVerifyEmailEvent($user, $this->verificationUrl($user->id, $request->get('redirect_to'))));
+
+        return new MessageResource([trans('messages.verify.email')]);
     }
 }

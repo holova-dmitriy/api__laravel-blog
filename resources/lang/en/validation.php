@@ -125,8 +125,8 @@ return [
     */
 
     'custom' => [
-        'attribute-name' => [
-            'rule-name' => 'custom-message',
+        'old_password' => [
+            'failed' => 'Old Password did not match to our records.',
         ],
     ],
 
