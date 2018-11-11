@@ -1,8 +1,8 @@
 <?php
 
+use App\Models\Post;
 use App\Models\User;
 use Faker\Generator as Faker;
-use Illuminate\Support\Carbon;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,11 +15,11 @@ use Illuminate\Support\Carbon;
 |
 */
 
-$factory->define(User::class, function (Faker $faker) {
+$factory->define(Post::class, function (Faker $faker) {
     return [
-        'name' => $faker->name,
-        'email' => $faker->unique()->safeEmail,
-        'password' => '$2y$10$TKh8H1.PfQx37YgCzwiKb.KjNyWgaHb9cbcoQgdIVFlYg7B77UdFm', // secret
-        'email_verified_at' => new Carbon,
+        'user_id' => User::all()->random()->id,
+        'title' => $faker->sentence,
+        'annotation' => $faker->paragraph(),
+        'content' => $faker->text(1000),
     ];
 });
