@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
         }
         if (Post::count() === 0) {
             $this->call(PostsTableSeeder::class);
+            $this->call(PhotosTableSeeder::class);
         }
     }
 }
