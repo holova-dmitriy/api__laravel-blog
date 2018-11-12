@@ -9,7 +9,7 @@ class PostRepository extends BaseRepository
     public function getPostsList(int $perPage, int $page = 1, string $filter = null)
     {
         return $this->responseRepository(
-            Post::with('author')
+            Post::with('author', 'photos')
                 ->when($filter, function ($query, $filter) {
                     return $query->where('title', 'like', "%$filter%")
                         ->orWhere('annotation', 'like', "%$filter%")

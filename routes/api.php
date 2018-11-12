@@ -33,3 +33,4 @@ Route::group([
 });
 
 Route::apiResource('posts', 'PostController');
+Route::resource('photos', 'PhotoController')->middleware('auth')->only(['store', 'destroy']);

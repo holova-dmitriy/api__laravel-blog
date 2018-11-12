@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use App\Http\Resources\BaseResource as Resource;
 
-class PostResource extends Resource
+class PhotoResource extends Resource
 {
     /**
      * Transform the resource into an array.
@@ -16,11 +16,7 @@ class PostResource extends Resource
     {
         return [
             'id' => $this->id,
-            'title' => $this->title,
-            'annotation' => $this->annotation,
-            'content' => $this->content,
-            'author' => new UserResource($this->author),
-            'photos' => PhotoResource::collection($this->photos),
+            'path' => $this->full_path,
         ];
     }
 }
